@@ -1,5 +1,6 @@
 # Source Files for the Paper
 
+- `thesis.cls`: a class file of Thesis format.
 - `main.tex`: a root TeX file.
 - `*.tex`: source TeX files loaded by the root.
 - `my_packages.sty`: a list of packages used in the writing.

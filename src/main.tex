@@ -1,27 +1,62 @@
-%--- set a given class file if exist ---%
 \documentclass[
-  a4paper,
-  notitlepage,
-  ja=standard,
-  autodetect-engine,
-  dvi=dvipdfmx,
-]{bxjsarticle}
-%---------------------------------------%
+  bachelor, % format as Bachelor's Thesis
+  % master, % format as Master's Thesis
+  % doctor, % format as Doctoral Thesis
+  % nofigure, % disable List of Figures
+  % notable, % disable List of Tables
+  noalgorithm, % disable List of Algorithms if algorithms are printed as Figures
+  % english, % writing in English
+]{thesis}
 
+% import/define your preferred packages/commands in the following styles
 \usepackage{my_packages}
 \usepackage{my_command_definitions}
 
-%--- modify the following lines according to a given class ---%
-\title{サンプルファイル}
-\author{山田 太郎}
+%------------------------------------------------------------------------------%
+% Describe thesis's title, author, abstract, etc.
+%------------------------------------------------------------------------------%
+\titleHeading{名古屋大学情報学部\\コンピュータ科学科\\卒業論文}
+\setSchoolYear{2020} % Used only in master's thesis
+\setYear{2024}
+\setMonth{2}
+\studentNumber{102030229} % Used only in bachelor's/master's thesis
+
+%---------- Japanese descriptions ----------
+\jpTitle{Universal Adaptive Radix Treeにおける空間分割の改善に関する研究}
+% 任意引数で改行なしのタイトルを概要ページ用に設定できます
+%\jpTitle[改行なしのタイトル]{改行ありの\\タイトル}
+\jpAuthor{杉江 祐介}
+\jpAffiliationMain{名古屋大学情報学部コンピュータ科学科} % 学士・修士論文でのみ使用されます
+\jpAffiliationSub{知能システム系} % 学士・修士論文でのみ使用されます
+\jpAbstract{
+概要文．
+}
+\jpKeyword{キーワード} % Used only in bachelor's thesis
+
+%---------- English descriptions (used only in master's thesis) ----------
+\enTitle{Title}
+% You can specify a title without line-break for abstract pages by using an option
+%\enTitle[Title Without Line-break]{Title With\\Line-break}
+\enAuthor{Author}
+\enAffiliationMain{Affiliation main} % Used only in bachelor's/master's thesis
+\enAffiliationSub{Affiliation sub} % Used only in bachelor's/master's thesis
+\enAbstract{
+Abstract text.
+}
+%-------------------------------------------------------------------------
 
 \begin{document}
 \maketitle
-%-------------------------------------------------------------%
 
 \input{contents.tex}
 
+\input{acknowledgement.tex}
+
+\input{appendix.tex}
+
 \bibliographystyle{ieeetr}
 \bibliography{reference}
+
+\input{publications.tex}
 
 \end{document}
