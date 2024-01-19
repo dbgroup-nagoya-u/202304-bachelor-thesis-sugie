@@ -72,7 +72,7 @@ UB層は挿入されたレコードを保持するデータ層であり，該当
 
 \begin{figure}[t]
   \centering
-  \includegraphics{./figures/fig_uart.pdf}
+  \includegraphics[scale = 1.4]{./figures/fig_uart.pdf}
   \caption{UARTの構造}
   \label{fig:uart}
 \end{figure}
@@ -115,9 +115,40 @@ UB木はZ値を使用した二次索引であり，同じZ値を持つレコー�
 つまり，ノードの空き容量がなく下層も生成しない場合はノードを分割し，UB木を拡張する．
 これにより，生成された下層には一定以上のオブジェクトが必ず含まれるため，各ノードの空間利用効率およびそれに伴う範囲走査性能の向上が見込める．
 
+本項では，ART層における下層生成の閾値をどのように決定したか説明する．
+閾値はUBノードが持てるレコード数の最大値（\Fig{\ref{fig:ubnode}}の$n$）と転置リストが持てる最大のレコード数（\Fig{\ref{fig:ubnode}}の$m$）により定まる．
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[scale = 1.4]{./figures/fig_ubnode.pdf}
+  \caption{UBノードの構造}
+  \label{fig:ubnode}
+\end{figure}
 
+まず，転置リストが持てる最大のレコード数$m$を計算する．
+ブロックサイズを，UBノード1ページから\Fig{\ref{fig:ubnode}}のheaderとhighest\_Zidを抜いたサイズとし，$B\,\mathrm{byte}$とする．
+そして，ポスティングリスト内のレコード（keyとMDkey）サイズを$x\,\mathrm{byte}$とする．
+meta\_arrは6バイト，Zidは1バイトなので，$m$は
+\begin{equation}
+  B \geq m(x + 7)
+\end{equation}
+を満たす最大の整数である．
+そのため$m$は
+\begin{equation}
+  m = \left\lfloor\frac{B}{x + 7}\right\rfloor
+\end{equation}
+となる．
 
+次に，UBノードが持てるレコード数の最大値$n$を計算する．
+すべてのポスティングリストが$m$個のレコードを持つとき，同様にして
+\begin{equation}
+  B \geq n(mx + 7)
+\end{equation}
+そのため$n$は
+\begin{equation}
+  m = \left\lfloor\frac{B}{\left\lfloor\frac{B}{x + 7}\right\rfloor}\right\rfloor
+\end{equation}
+となる．
 
 \chapter{評価実験}
 
