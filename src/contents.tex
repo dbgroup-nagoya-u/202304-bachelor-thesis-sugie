@@ -121,6 +121,34 @@ UB木はZ値を使用した二次索引であり，同じZ値を持つレコー�
 
 \chapter{評価実験}
 
+本実験では，偏りなどデータのパラメータに対する頑健性と，実データを用いた有用性を評価する．
+
+比較対象は既存手法のUARTと，現在多次元索引としてよく使われるUB木とR木の計3つとする．
+各手法でそれぞれのデータに対して挿入，構築・破棄，範囲検索処理のスループットを測定する．
+実験はすべて単一スレッドで行い，命令を逐次的に発行する．
+\Tab{\ref{tab:environment}}に本実験で使用する環境を示す．
+
+\begin{table}[tb]
+  \caption{実験用サーバの構成}
+  \label{tab:environment}
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    Item     & Value                                              \\
+    \cmidrule(r){1-1}
+    \cmidrule(l){2-2}
+    CPU      & Intel(R) Xeon(R) Gold 6262V (two sockets)          \\
+    RAM      & DIMM DDR4 (Registered) 2933 MHz (16GB $\times$ 14) \\
+    OS       & Ubuntu 22.04.2 LTS                                 \\
+    Compiler & GNU C++ ver. 9.4.0                                 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+有用性の評価には，日本，アジア，地球の規模の異なる3つの地理データセットを用いた．
+また，パラメータに対する頑健性の評価には，各次元の値がZipf関数に従う人工データを用いた．
+
+
 
 
 
