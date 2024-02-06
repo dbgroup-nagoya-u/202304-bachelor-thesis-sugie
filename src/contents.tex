@@ -93,19 +93,19 @@ ARTでは与えられたキーを1バイトの部分キーに分割し索引を�
 各ノードは保持するレコードの数だけでなく，保持する方法も違う．
 
 Node4は，キーと子ノードへのポインタを4個ずつ持つ．
-キーとキーに対応する子ノードへのポインタは，どちらもi番目に保持される．
-ここで，キーが保存される配列をkey\_array，ポインタが保存される配列をpointer\_arrayとすると，key\_array[i]=key，pointer\_array[i]=child\_pointerが成立する．
-つまり，i番目のキーはi番目のポインタに対応している．
+キーとキーに対応する子ノードへのポインタは，どちらも$i$番目に保持される．
+ここで，キーが保存される配列を$key\_array$，ポインタが保存される配列を$pointer\_array$とすると，$key\_array[i]=key$，$pointer\_array[i]=child\_pointer$が成立する．
+つまり，$i$番目のキーはi番目のポインタに対応している．
 Node16もキーとと子ノードへのポインタを持つ数が16になっただけで，Node4と同じ構造である．
 
 Node48は，キーと子ノードへのポインタを48個ずつ持つ．
-しかし，key\_arrayのサイズは256である．
+しかし，$key\_array$のサイズは256である．
 そして，キーの値がキーが格納されているインデックスの値と一致し，キーの値と対応する子ノードへのポインタが格納されているインデックスの値と一致する．
-つまり，key\_array[key]=i，pointer\_array[i]=child\_pointerが成立する．
+つまり，$key\_array[key]=i$，$pointer\_array[i]=child\_pointer$が成立する．
 
 Node256では，キーと子ノードへのポインタを256個ずつ持つ．
-key\_arrayはなく，キーがpointer\_arrayのインデックスに一致する．
-つまり，pointer\_array[key]=child\_pointerが成立する．
+$key\_array$はなく，キーが$pointer\_array$のインデックスに一致する．
+つまり，$pointer\_array[key]=child\_pointer$が成立する．
 
 ARTは部分キーに偏りのある箇所では容量の少ないNode4やNode16が使用され，基数木の欠点である空間利用効率の悪化を克服している．
 UARTでもキーの管理にノード選択を用いることで空間利用効率を向上させている．
@@ -129,7 +129,7 @@ UB層は挿入されたレコードを保持するデータ層であり，該当
 
 \begin{figure}[t]
   \centering
-  \includegraphics[scale = 2.0]{./figures/fig_uart.pdf}
+  \includegraphics[scale = 1.75]{./figures/fig_uart.pdf}
   \caption{UARTの構造}
   \label{fig:uart}
 \end{figure}
@@ -183,7 +183,7 @@ UB木はZ値を使用した二次索引であり，同じZ値を持つレコー�
   \centering
   \includegraphics{./figures/graph-pagesize.pdf}
   \caption{UART の変更前後における葉ノードの変化時の挿入・範囲検索のスループットの比較}
-  \label{fig:uart}
+  \label{graph:pagesize}
 \end{figure}
 
 

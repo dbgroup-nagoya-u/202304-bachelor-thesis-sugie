@@ -78,7 +78,10 @@
     "UART",
     "uplatex",
     "Viktor",
-    "WWCA"
+    "WWCA",
+    "DIMM",
+    "Zipf",
+    "NEDO"
   ],
   // unify indentation
   "[markdown]": {
