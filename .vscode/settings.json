@@ -51,7 +51,9 @@
   "textlint.nodePath": ".linter/node_modules",
   "textlint.configPath": ".linter/lintrules/textlint/textlint.json",
   "cSpell.words": [
+    "Alfons",
     "algorithmicx",
+    "Appl",
     "biber",
     "Broy",
     "bxjsarticle",
@@ -59,12 +61,27 @@
     "Creight",
     "deim",
     "dvipdfmx",
+    "ICDE",
     "inbook",
+    "inproceedings",
     "IPSJ",
+    "JPNP",
+    "JSPS",
+    "Kemper",
+    "Kitagawa",
+    "Kriegel",
     "lualatex",
+    "Neumann",
     "pbibtex",
     "platex",
-    "uplatex"
+    "Ralf",
+    "UART",
+    "uplatex",
+    "Viktor",
+    "WWCA",
+    "DIMM",
+    "Zipf",
+    "NEDO"
   ],
   // unify indentation
   "[markdown]": {
