@@ -54,7 +54,7 @@ Z値への変換は，多次元座標の各座標を2進符号化し上位ビッ
 さらに，葉ノードのポインタをたどることで全検索や範囲検索も高速に行うことができる．
 また，各ノードはが全て同じサイズの領域として管理されるのでメモリ管理が容易となり利用効率も向上する．
 
-\begin{figure}[t]
+\begin{figure}[tb]
   \centering
   \includegraphics{./figures/fig_bptree.pdf}
   \caption{\BTree{}の構造}
@@ -127,7 +127,7 @@ UB層は挿入されたレコードを保持するデータ層であり，該当
 そして，区切られたZ値のうち上位4ビットと中位4ビットはそれぞれの層のグレー色に塗りつぶされた区画に，下位の4ビットは最下層の灰色のレコードに対応している．
 以下では，ART層とUB層の構造について概略を述べる．
 
-\begin{figure}[t]
+\begin{figure}[tb]
   \centering
   \includegraphics[scale = 1.75]{./figures/fig_uart.pdf}
   \caption{UARTの構造}
@@ -182,12 +182,12 @@ UB木はZ値を使用した二次索引であり，同じZ値を持つレコー�
 そのために，各データに対して読み込みと書き込みを行い，それぞれのスループットを測定する．
 以下ではより詳細な実験方法について述べる．
 
-本実験では，頑健性・有用性のどちらの評価においても，用意したデータに挿入，構築・破棄，範囲検索処理を行いスループットを測定した．
+本実験では，頑健性・有用性のどちらの評価においても，用意したデータに挿入，構築・破棄，範囲検索処理を行いスループットを測定する．
 比較対象は既存手法のUARTと，多次元索引としてよく使われるUB木とR*木である．
-R*木は，boostとlibspatialindexの二つの実装を用いた．
+R*木は，boostとlibspatialindexの二つの実装を用いる．
 R*木はどちらも空間利用効率が高く範囲検索に優れている．
 boostの実装はlibspatialindexの実装に比べ高速であるが，4次元以上に対応していない．
-そのため，両方共を比較対象とした．
+そのため，両方共を比較対象とする．
 どの実験もすべて単一スレッドで行い，命令を逐次的に発行する．
 \Tab{\ref{tab:environment}}に本実験で使用する環境を示す．
 
@@ -208,19 +208,56 @@ boostの実装はlibspatialindexの実装に比べ高速であるが，4次元�
   \end{tabular}
 \end{table}
 
-そして，有用性の評価には，日本，アジア，地球の規模の異なる3つの地理データセットを用いた．
-また，パラメータに対する頑健性の評価には，各次元の値がZipf関数に従うシミュレーションデータを用いた．
+そして，有用性の評価には，日本，アジア，地球の規模の異なる3つの地理データセットを用いる．
+また，パラメータに対する頑健性の評価には，各次元の値がZipf関数に従うシミュレーションデータを用いる．
 
+Zipf関数は各次元の値がZipfの法則に従うように多次元値を生成する関数である．
+Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の関係が成り立つという経験則である．
+そして，Zipfデータセットは各次元独立で近似的に\Eq{\ref{eq:zipf}}に示すZipf分布に従う\footnote{\footnotesize\url{https://github.com/dbgroup-nagoya-u/cpp-utility}}．
+\begin{equation}
+  \label{eq:zipf}
+  f(k; \alpha, |W|) = \frac{1 / k^{\alpha}}{\sum_{n = 1}^{|W|} 1 / n^{\alpha}}
+\end{equation}
+\Eq{\ref{eq:zipf}}中の\alpha はスキューパラメータであり，$\alpha = 0$の時にZipfデータセットは一様分布となる．
 
+\section{ページサイズ}
+UARTのハイパラメータに葉ノードのページサイズがある．
+ページサイズはレコードの容量として捉えられるため，挿入操作や範囲検索の結果を左右することが容易に考えられる．
+そこで，UARTとその他の索引構造との比較を行う前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
 
-\begin{figure}[t]
+UARTの改善前後で挿入と範囲検索のスループットを測定した．
+UARTの改善後はすべてのページサイズにおいてUARTの改善前よりよい結果が得られた．
+また，範囲検索ではページサイズの大きさに比例してスループットもよくなった．
+結果を\Fig{\ref{graph:pagesize}}に示す．
+\begin{figure}[tb]
   \centering
   \includegraphics{./figures/graph-pagesize.pdf}
   \caption{UART の変更前後における葉ノードの変化時の挿入・範囲検索のスループットの比較}
   \label{graph:pagesize}
 \end{figure}
-
-
+また，実験に用いたUARTのパラメータを\Tab{\ref{tab:pagesize}}に示す．
+\begin{table}[tb]
+  \caption{UARTのパラメータ}
+  \label{tab:pagesize}
+  \centering \small \small
+  \begin{tabular}{llllrrrr}
+    \toprule
+    比較対象     & 操作     & 型    & セット & 次元 & レコード数 & スキュー & 選択率 \\
+    \cmidrule(lr){1-1}
+    \cmidrule(lr){2-2}
+    \cmidrule(lr){3-3}
+    \cmidrule(lr){4-4}
+    \cmidrule(lr){5-5}
+    \cmidrule(lr){6-6}
+    \cmidrule(lr){7-7}
+    \cmidrule(lr){8-8}
+    UART         & 構築     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART(改善後) & 構築     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART         & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    UART(改善後) & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 
 \chapter{おわりに}
