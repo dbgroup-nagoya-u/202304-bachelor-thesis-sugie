@@ -35,11 +35,11 @@ UARTの構成要素として利用するUB木とARTについて説明する．
 
 \section{Universal B木（UB木）}
 
-UB木~\cite{vldb:ramsak2000}は，多次元空間を\ZCurve に基づき一次元空間に変換し，変換後の\ZValue を\BTree のキーとして使用する索引構造である．
+UB木~\cite{vldb:ramsak2000}は，多次元空間を\ZCurve に基づき1次元空間に変換し，変換後の\ZValue を\BTree のキーとして使用する索引構造である．
 構造自体と，検索・挿入・削除といった各操作は\BTree と変わらない．
 そのため，UB木の特徴である\ZCurve と\BTree について述べる．
 
-\ZCurve ~\cite{acm:Gaede1998}は空間充填曲線の一種であり，二次元空間であれば``Z''の記号を描くような曲線となる．
+\ZCurve ~\cite{acm:Gaede1998}は空間充填曲線の一種であり，2次元空間であれば``Z''の記号を描くような曲線となる．
 \ZValue は\ZCurve 上の開始点からの距離であり，距離が近いものは多次元空間上でも近いことが多い．
 ただし，空間充填曲線の性質上，\ZValue としては隣接するものが多次元空間上では遠く離れる場合もある．
 \ZValue への変換は，多次元座標の各座標を2進符号化し上位ビットから順に交互配置することで行う．
@@ -55,10 +55,10 @@ UB木~\cite{vldb:ramsak2000}は，多次元空間を\ZCurve に基づき一次�
 また，各ノードはが全て同じサイズの領域として管理されるのでメモリ管理が容易となり利用効率も向上する．
 
 \begin{figure}[tb]
-    \centering
-    \includegraphics{./figures/fig_bptree.pdf}
-    \caption{\BTree{}の構造}
-    \label{fig:bptree}
+  \centering
+  \includegraphics{./figures/fig_bptree.pdf}
+  \caption{\BTree{}の構造}
+  \label{fig:bptree}
 \end{figure}
 
 UB木は\BTree{}の一種であるためそのデータ構造は効率的だが，空間分割が非効率的であるという問題がある．
@@ -116,7 +116,7 @@ UARTでもキーの管理にノード選択を用いることで空間利用効�
 \chapter{Universal Adaptive Radix Tree（UART）}
 
 UARTはUB木を拡張し，主に空間分割を担うART層と挿入されたレコードの保持を担うUB層に分けた多次元索引である．
-\ZCurve は多次元空間を一次元上の値として表現しており，上位ビットから下位ビットに進むにつれ粒度の細かい空間分割が行われる．
+\ZCurve は多次元空間を1次元上の値として表現しており，上位ビットから下位ビットに進むにつれ粒度の細かい空間分割が行われる．
 そこで，UARTでは変換後の\ZValue を1バイトずつの部分キーに区切り，部分キーによって表される空間分割をARTにより管理する．
 つまり，ART層では多次元空間上でレコードが密な領域ほど空間が分割され，深い階層が生成される．
 UB層は挿入されたレコードを保持するデータ層であり，該当領域に存在する疎なレコード群への効率的な範囲走査を実現する．
@@ -124,14 +124,14 @@ UB層は挿入されたレコードを保持するデータ層であり，該当
 \Fig{\ref{fig:uart}}にUARTの概念図を示す．
 本来のUARTでは\ZValue を1バイトずつに区切るが，\Fig{\ref{fig:uart}}では\ZValue を4ビットごとに区切っている．
 また，ART層の丸はレコードを，UB層の丸はUB木のノードを表している．
-そして，区切られた\ZValue のうち上位4ビットと中位4ビットはそれぞれの層のグレー色に塗りつぶされた区画に，下位の4ビットは最下層の灰色のレコードに対応している．
+そして，区切られた\ZValue のうち上位4ビットと中位4ビットは各層のグレー色で塗りつぶされた区画に，下位の4ビットは最下層にある灰色のレコードに対応している．
 以下では，ART層とUB層の構造について概略を述べる．
 
 \begin{figure}[tb]
-    \centering
-    \includegraphics[scale = 1.75]{./figures/fig_uart.pdf}
-    \caption{UARTの構造}
-    \label{fig:uart}
+  \centering
+  \includegraphics[scale = 1.75]{./figures/fig_uart.pdf}
+  \caption{UARTの構造}
+  \label{fig:uart}
 \end{figure}
 
 \paragraph{ART層}
@@ -190,20 +190,20 @@ boostの実装が，libspatialindexの実装に比べ高速な一方で，4次�
 \Tab{\ref{tab:environment}}に本実験で使用する環境を示す．
 
 \begin{table}[tb]
-    \caption{実験用サーバの構成}
-    \label{tab:environment}
-    \centering
-    \begin{tabular}{ll}
-        \toprule
-        Item     & Value                                              \\
-        \cmidrule(r){1-1}
-        \cmidrule(l){2-2}
-        CPU      & Intel(R) Xeon(R) Gold 6262V (two sockets)          \\
-        RAM      & DIMM DDR4 (Registered) 2933 MHz (16GB $\times$ 14) \\
-        OS       & Ubuntu 22.04.2 LTS                                 \\
-        Compiler & GNU C++ ver. 9.4.0                                 \\
-        \bottomrule
-    \end{tabular}
+  \caption{実験用サーバの構成}
+  \label{tab:environment}
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    Item     & Value                                              \\
+    \cmidrule(r){1-1}
+    \cmidrule(l){2-2}
+    CPU      & Intel(R) Xeon(R) Gold 6262V (two sockets)          \\
+    RAM      & DIMM DDR4 (Registered) 2933 MHz (16GB $\times$ 14) \\
+    OS       & Ubuntu 22.04.2 LTS                                 \\
+    Compiler & GNU C++ ver. 9.4.0                                 \\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
 そして，有用性の評価には，日本，アジア，地球の規模の異なる3つの地理データセットを用いる．
@@ -213,62 +213,73 @@ Zipf関数は各次元の値がZipfの法則に従うように多次元値を生
 Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の関係が成り立つという経験則である．
 そして，Zipfデータセットは各次元独立で近似的に\Eq{\ref{eq:zipf}}に示すZipf分布に従う\footnote{\footnotesize\url{https://github.com/dbgroup-nagoya-u/cpp-utility}}．
 \begin{equation}
-    \label{eq:zipf}
-    f(k; \alpha, |W|) = \frac{1 / k^{\alpha}}{\sum_{n = 1}^{|W|} 1 / n^{\alpha}}
+  \label{eq:zipf}
+  f(k; \alpha, |W|) = \frac{1 / k^{\alpha}}{\sum_{n = 1}^{|W|} 1 / n^{\alpha}}
 \end{equation}
 \Eq{\ref{eq:zipf}}中の\alpha はスキューパラメータであり，$\alpha = 0$の時にZipfデータセットは一様分布となる．
 
 \section{ページサイズ}
 UARTのハイパラメータに葉ノードのページサイズがある．
 ページサイズはレコードの容量として捉えられるため，挿入操作や範囲検索の結果を左右することが容易に考えられる．
-そこで，UARTとその他の索引構造との比較を行う前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
+そこで，UARTとその他の索引構造との比較する前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
 
 UARTの改善前後で挿入と範囲検索のスループットを測定した．
-以降では，UARTの改善後をUART(改善後)，UARTの改善前をUARTと表記する．
-UART(改善後)はすべてのページサイズにおいてUARTよりよい結果が得られた．
-挿入では，UART(改善後)はUARTの1.3倍から1.8倍ほどのスループットになった．
-UART(改善後)ではページサイズの影響が小さく，UARTではページサイズが大きくなるとスループットが小さくなった．
-また範囲検索では，UART(改善後)はUARTの1.5倍から1.9倍ほどのスループットになった．
-挿入のときとは反対に，UART(改善後)ではページサイズが大きくなるとスループットも大きくなり，UARTではページサイズの影響が小さかった．
+以降では，UARTの改善後をUART（改善後），UARTの改善前をUARTと表記する．
+UART（改善後）はすべてのページサイズにおいてUARTよりよい結果が得られた．
+挿入では，UART（改善後）はUARTの1.3倍から1.8倍ほどのスループットになった．
+UART（改善後）ではページサイズの影響が小さく，UARTではページサイズが大きくなるとスループットが小さくなった．
+また範囲検索では，UART（改善後）はUARTの1.5倍から1.9倍ほどのスループットになった．
+挿入のときとは反対に，UART（改善後）ではページサイズが大きくなるとスループットも大きくなり，UARTではページサイズの影響が小さかった．
 結果を\Fig{\ref{graph:pagesize}}に示す．
 \begin{figure}[tb]
-    \centering
-    \includegraphics{./figures/graph-pagesize.pdf}
-    \caption{UARTの改善における挿入・範囲検索の性能比較}
-    \label{graph:pagesize}
+  \centering
+  \includegraphics{./figures/graph-pagesize.pdf}
+  \caption{UARTの改善における挿入・範囲検索の性能比較}
+  \label{graph:pagesize}
 \end{figure}
 また，実験に用いたUARTのパラメータを\Tab{\ref{tab:pagesize}}に示す．
 \begin{table}[tb]
-    \caption{UARTのパラメータ}
-    \label{tab:pagesize}
-    \centering \small \small
-    \begin{tabular}{llllrrrr}
-        \toprule
-        比較対象     & 操作     & 型    & セット & 次元 & レコード数 & スキュー & 選択率 \\
-        \cmidrule(lr){1-1}
-        \cmidrule(lr){2-2}
-        \cmidrule(lr){3-3}
-        \cmidrule(lr){4-4}
-        \cmidrule(lr){5-5}
-        \cmidrule(lr){6-6}
-        \cmidrule(lr){7-7}
-        \cmidrule(lr){8-8}
-        UART         & 挿入     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
-        UART(改善後) & 挿入     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
-        UART         & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
-        UART(改善後) & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
-        \bottomrule
-    \end{tabular}
+  \caption{UARTのパラメータ}
+  \label{tab:pagesize}
+  \centering \small \small
+  \begin{tabular}{llllrrrr}
+    \toprule
+    比較対象       & 操作     & 型    & セット & 次元 & レコード数 & スキュー & 選択率 \\
+    \cmidrule(lr){1-1}
+    \cmidrule(lr){2-2}
+    \cmidrule(lr){3-3}
+    \cmidrule(lr){4-4}
+    \cmidrule(lr){5-5}
+    \cmidrule(lr){6-6}
+    \cmidrule(lr){7-7}
+    \cmidrule(lr){8-8}
+    UART           & 挿入     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART（改善後） & 挿入     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART           & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    UART（改善後） & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
-まず，UART(改善後)がUARTを上回った理由は，空間利用効率が上昇したためだと考えられる．
-UART(改善後)はUARTに比べ空間を分割しないため，階層が比較的生成されない．
-そのため，各操作におけるページアクセス数が減少し性能が向上したと考えられる．
+UART（改善後）が全ての項目でUARTを上回った理由は，空間利用効率が上昇したためだと考えられる．
+UART（改善後）はUARTに比べ空間を分割しないため，下層が比較的生成されない．
+階層が低いと，各操作におけるページアクセス数が減少する．
+そのため，挿入や範囲検索時にキーを見つける時間が減少し性能が向上したと考えられる．
 
-次に，挿入においてページサイズが変わってもスループットが大きく変わらない理由は，
+挿入において，UART（改善後）ではページサイズの影響が小さかった理由は，ページアクセス数の減少による時間短縮と挿入に伴う木構造の変化による時間延長がトレードオフであるためだと考えられる．
+葉ノードにレコードが挿入できなくなった場合，ART層で下層生成するかUB層でノードを分割する．
+ページサイズが小さいと，下層生成が多く発生し木が高くなるが，ノードの分割回数と1分割当たりにかかる時間が小さくなる．
+一方で，ページサイズが大きいと，下層生成が発生しなくなり木が低くなるが，ノードの分割回数と1分割当たりにかかる時間が大きくなる．
+また，UARTではページサイズが大きくなるとスループットが小さくなった理由は，ページアクセス数の減少による時間短縮と挿入に伴う木構造の変更による時間延長がトレードオフでないためだと考えられる．
+空間分割が非効率だと，ページサイズが大きくても木が低くならない．
+そのため，ページアクセス数が増加し，さらにノードの分割回数と1分割当たりにかかる時間が大きくなる．
 
-最後に範囲検索においてページサイズが大きいときにスループットが良くなった理由は，
+範囲検索において，UART（改善後）ではページサイズが大きいときにスループットが良くなった理由は，空間利用効率が最適化されたことによりページアクセス数が減少したためだと考えられる．
+一方で，UARTではページサイズの影響が小さかった理由は，空間分割が非効率なことにより木の高さがあまり変わらないことが原因だと考えられる．
+範囲検索では特にページアクセス数がボトルネックになるので木の高さが性能に強く影響すると考えられる．
+つまり，UART（改善後）では，ページアクセス数が減少することで検索速度が向上したと考えられる．
 
+\section{構築・破棄}
 
 
 
