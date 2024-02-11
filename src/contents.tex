@@ -224,14 +224,13 @@ UBノードが見つかったらレコードを挿入すべき転置リストを
 
 \chapter{評価実験}
 
-本章では，偏りなどデータのパラメータに対する頑健性と，実データを用いた有用性を評価する．
+% 実験概要
+本研究では，偏りなどデータのパラメータに対する頑健性と，実データを用いた有用性を評価する．
 そのために，各データに対して読み込みと書き込みを行い，それぞれのスループットを測定する．
 以下ではより詳細な実験方法について述べる．
 
+%ワークロード
 本実験では，頑健性・有用性のどちらの評価においても，挿入，削除，更新，範囲検索いずれかのみを含むワークロードを用いてスループットを測定する．
-比較対象として空間分割を改善する前のUARTに加え，同じく\ZCurve を用いるUB木と空間索引としてよく用いられる\RTree を使用する．
-\RTree は空間利用効率が高く範囲検索に優れており，データの次元数に合わせてboostとlibspatialindexの2つの実装を用いる．
-boostの実装が，libspatialindexの実装に比べ高速な一方で，4次元以上に対応していないためである．
 どの実験も全て単一スレッドで行い，命令を逐次的に発行する．
 \Tab{\ref{tab:environment}}に本実験で使用する環境を示す．
 
@@ -252,6 +251,7 @@ boostの実装が，libspatialindexの実装に比べ高速な一方で，4次�
   \end{tabular}
 \end{table}
 
+%データセット
 有用性の評価には実データを，パラメータに対する頑健性の評価にはシミュレーションデータを用いる．
 有用性の評価に用いる実データはOpenStreetMapより入手した日本のPoint of Interest（POI）に関するデータであり，約85万点の2次元座標（緯度経度）からなる．
 \Fig{\ref{fig:japan}}
@@ -265,8 +265,6 @@ boostの実装が，libspatialindexの実装に比べ高速な一方で，4次�
 頑健性の評価には，各次元の値がZipf関数に従うシミュレーションデータを用いる．
 次元の数は可変であり，各次元の値は4バイトの非負整数型で表す．
 Zipf関数は各次元の値がZipfの法則に従うように多次元値を生成する関数である．
-
-Zipf関数は各次元の値がZipfの法則に従うように多次元値を生成する関数である．
 Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の関係が成り立つという経験則である．
 そして，Zipfデータセットは各次元独立で近似的に\Eq{\ref{eq:zipf}}に示すZipf分布に従う\footnote{\footnotesize\url{https://github.com/dbgroup-nagoya-u/cpp-utility}}．
 \begin{equation}
@@ -275,7 +273,13 @@ Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の�
 \end{equation}
 \Eq{\ref{eq:zipf}}中の\alpha はスキューパラメータであり，$\alpha = 0$の時にZipfデータセットは一様分布となる．
 
-\section{ページサイズ}
+%比較対象
+比較対象として空間分割を改善する前のUARTに加え，同じく\ZCurve を用いるUB木と空間索引としてよく用いられる\RTree を使用する．
+\RTree は空間利用効率が高く範囲検索に優れており，データの次元数に合わせてboostとlibspatialindexの2つの実装を用いる．
+boostの実装が，libspatialindexの実装に比べ高速な一方で，4次元以上に対応していないためである．
+
+\section{頑健性}
+\subsection{ページサイズ}
 UARTをチューニングするためのパラメータとして，UB木のノードを生成する際のページサイズがある．
 ページサイズはレコードの容量として捉えられるため，挿入操作や範囲検索の結果を左右することが考えられる．
 そこで，UARTとその他の索引構造との比較する前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
@@ -351,7 +355,7 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 以上から，UART（改善後）はページサイズを大きくするとページアクセス数が減少し，読み込み性能が向上すると考えられる．
 そのためこれ以降の実験では，UART（改善後）とUARTのページサイズ数を8,192バイトに設定する．
 
-\section{書き込み}
+\subsection{書き込み}
 
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
@@ -488,30 +492,51 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
   \end{minipage}
 \end{figure}
 
-\section{読み込み}
+\subsection{読み込み}
 \begin{figure}[tb]
-  \centering
-  \includegraphics{./figures/graph-scan-datasize.pdf}
-  \caption{データ数変化時の範囲検索}
-  \label{fig:japan}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-datasize.pdf}
+    \caption{データ数変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-dimenntion.pdf}
+    \caption{次元数変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
 \end{figure}
 \begin{figure}[tb]
-  \centering
-  \includegraphics{./figures/graph-scan-dimenntion.pdf}
-  \caption{次元数変化時の範囲検索}
-  \label{fig:japan}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-skew.pdf}
+    \caption{スキュー変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-selectivity.pdf}
+    \caption{選択率変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
 \end{figure}
+
+\section{有用性}
+
 \begin{figure}[tb]
-  \centering
-  \includegraphics{./figures/graph-scan-skew.pdf}
-  \caption{スキュー変化時の範囲検索}
-  \label{fig:japan}
-\end{figure}
-\begin{figure}[tb]
-  \centering
-  \includegraphics{./figures/graph-scan-selectivity.pdf}
-  \caption{選択率変化時の範囲検索}
-  \label{fig:japan}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-japan-write.pdf}
+    \caption{日本データにおける書き込み性能}
+    \label{fig:japan}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-japan-read.pdf}
+    \caption{日本データにおける読み込み性能}
+    \label{fig:japan}
+  \end{minipage}
 \end{figure}
 
 \chapter{おわりに}
@@ -519,11 +544,3 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 本研究では，UARTにおける空間分割の効率化によるメモリ利用効率の向上について提案した．
 空間使用量を考慮していないという既存研究の課題について説明し，UARTにおける空間使用量を考慮した空間分割について述べた．
 今後は提案手法の実装，および既存研究との比較による有効性の検証を行う予定である．
-
-
-
-
-
-\chapter*{謝辞}
-
-本研究の一部はJSPS科研費JP20K19804，JP21H03555，JP22H03594の助成，日本電信電話株式会社との共同研究，および国立研究開発法人新エネルギー・産業技術総合開発機構（NEDO）の委託業務（JPNP16007）の結果得られたものである．
