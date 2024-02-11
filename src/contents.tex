@@ -178,14 +178,13 @@ UB木はZ値を使用した二次索引であり，同じZ値を持つレコー�
 
 \chapter{評価実験}
 
-本章では，偏りなどデータのパラメータに対する頑健性と，実データを用いた有用性を評価する．
+% 実験概要
+本研究では，偏りなどデータのパラメータに対する頑健性と，実データを用いた有用性を評価する．
 そのために，各データに対して読み込みと書き込みを行い，それぞれのスループットを測定する．
 以下ではより詳細な実験方法について述べる．
 
-本実験では，頑健性・有用性のどちらの評価においても，用意したデータに挿入，構築・破棄，範囲検索処理を行いスループットを測定する．
-比較対象は既存手法のUARTと，多次元索引としてよく使われるUB木と\RTree である．
-\RTree は空間利用効率が高く範囲検索に優れており，データの次元数に合わせてboostとlibspatialindexの2つの実装を用いる．
-boostの実装が，libspatialindexの実装に比べ高速な一方で，4次元以上に対応していないためである．
+%ワークロード
+本実験では，頑健性・有用性のどちらの評価においても，挿入，削除，更新，範囲検索いずれかのみを含むワークロードを用いてスループットを測定する．
 どの実験も全て単一スレッドで行い，命令を逐次的に発行する．
 \Tab{\ref{tab:environment}}に本実験で使用する環境を示す．
 
@@ -200,15 +199,25 @@ boostの実装が，libspatialindexの実装に比べ高速な一方で，4次�
     \cmidrule(l){2-2}
     CPU      & Intel(R) Xeon(R) Gold 6262V (two sockets)          \\
     RAM      & DIMM DDR4 (Registered) 2933 MHz (16GB $\times$ 14) \\
-    OS       & Ubuntu 22.04.2 LTS                                 \\
+    OS       & Ubuntu 20.04.6 LTS                                 \\
     Compiler & GNU C++ ver. 9.4.0                                 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-そして，有用性の評価には，日本，アジア，地球の規模の異なる3つの地理データセットを用いる．
-また，パラメータに対する頑健性の評価には，各次元の値がZipf関数に従うシミュレーションデータを用いる．
-
+%データセット
+有用性の評価には実データを，パラメータに対する頑健性の評価にはシミュレーションデータを用いる．
+有用性の評価に用いる実データはOpenStreetMapより入手した日本のPoint of Interest（POI）に関するデータであり，約85万点の2次元座標（緯度経度）からなる．
+\Fig{\ref{fig:japan}}
+\begin{figure}[tb]
+  \centering
+  \includegraphics[scale=0.4]{./figures/japan-poi.png}
+  \caption{日本データ}
+  \label{fig:japan}
+\end{figure}
+実験では各座標を倍精度浮動小数点型で管理する。
+頑健性の評価には，各次元の値がZipf関数に従うシミュレーションデータを用いる．
+次元の数は可変であり，各次元の値は4バイトの非負整数型で表す．
 Zipf関数は各次元の値がZipfの法則に従うように多次元値を生成する関数である．
 Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の関係が成り立つという経験則である．
 そして，Zipfデータセットは各次元独立で近似的に\Eq{\ref{eq:zipf}}に示すZipf分布に従う\footnote{\footnotesize\url{https://github.com/dbgroup-nagoya-u/cpp-utility}}．
@@ -218,48 +227,60 @@ Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の�
 \end{equation}
 \Eq{\ref{eq:zipf}}中の\alpha はスキューパラメータであり，$\alpha = 0$の時にZipfデータセットは一様分布となる．
 
-\section{ページサイズ}
-UARTのハイパラメータに葉ノードのページサイズがある．
-ページサイズはレコードの容量として捉えられるため，挿入操作や範囲検索の結果を左右することが容易に考えられる．
+%比較対象
+比較対象として空間分割を改善する前のUARTに加え，同じく\ZCurve を用いるUB木と空間索引としてよく用いられる\RTree を使用する．
+\RTree は空間利用効率が高く範囲検索に優れており，データの次元数に合わせてboostとlibspatialindexの2つの実装を用いる．
+boostの実装が，libspatialindexの実装に比べ高速な一方で，4次元以上に対応していないためである．
+
+\section{頑健性}
+\subsection{ページサイズ}
+UARTをチューニングするためのパラメータとして，UB木のノードを生成する際のページサイズがある．
+ページサイズはレコードの容量として捉えられるため，挿入操作や範囲検索の結果を左右することが考えられる．
 そこで，UARTとその他の索引構造との比較する前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
 
-UARTの改善前後で挿入と範囲検索のスループットを測定した．
-以降では，UARTの改善後をUART（改善後），UARTの改善前をUARTと表記する．
-UART（改善後）は全てのページサイズにおいてUARTよりよい結果が得られた．
-挿入では，UART（改善後）はUARTの1.3倍から1.8倍ほどのスループットになった．
-UART（改善後）ではページサイズの影響が小さく，UARTではページサイズが大きくなるとスループットが小さくなった．
-また範囲検索では，UART（改善後）はUARTの1.5倍から1.9倍ほどのスループットになった．
-挿入のときとは反対に，UART（改善後）ではページサイズが大きくなるとスループットも大きくなり，UARTではページサイズの影響が小さかった．
-結果を\Fig{\ref{graph:pagesize}}に示す．
+2次元のシミュレーションデータを用いて，UARTの改善前後における挿入と範囲検索のスループットを測定した．
+結果を\Fig{\ref{graph:ps-in}}\Fig{\ref{graph:ps-sc}}に示す．
 \begin{figure}[tb]
-  \centering
-  \includegraphics{./figures/graph-pagesize.pdf}
-  \caption{UARTの改善における挿入・範囲検索の性能比較}
-  \label{graph:pagesize}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-pagesize-insert.pdf}
+    \caption{ページサイズ変化時の挿入の比較}
+    \label{graph:ps-in}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-pagesize-scan.pdf}
+    \caption{ページサイズ変化時の範囲検索の比較}
+    \label{graph:ps-sc}
+  \end{minipage}
 \end{figure}
 また，実験に用いたUARTのパラメータを\Tab{\ref{tab:pagesize}}に示す．
 \begin{table}[tb]
   \caption{UARTのパラメータ}
   \label{tab:pagesize}
-  \centering \small \small
-  \begin{tabular}{llllrrrr}
+  \centering \small
+  \begin{tabular}{llrrrr}
     \toprule
-    比較対象       & 操作     & 型    & セット & 次元 & レコード数 & スキュー & 選択率 \\
+    比較対象       & 操作     & 次元 & レコード数 & スキュー & 選択率 \\
     \cmidrule(lr){1-1}
     \cmidrule(lr){2-2}
     \cmidrule(lr){3-3}
     \cmidrule(lr){4-4}
     \cmidrule(lr){5-5}
     \cmidrule(lr){6-6}
-    \cmidrule(lr){7-7}
-    \cmidrule(lr){8-8}
-    UART           & 挿入     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
-    UART（改善後） & 挿入     & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & NONE   \\
-    UART           & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
-    UART（改善後） & 範囲検索 & UInt4 & Zipf   & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    UART           & 挿入     & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART（改善後） & 挿入     & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART           & 範囲検索 & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    UART（改善後） & 範囲検索 & 2    & 1,000,000  & 0.3      & 0.0001 \\
     \bottomrule
   \end{tabular}
 \end{table}
+以降では，UARTの改善後をUART（改善後），UARTの改善前をUARTと表記する．
+UART（改善後）は全てのページサイズにおいてUARTよりよい結果が得られた．
+挿入では，UART（改善後）はUARTの1.3倍から1.8倍ほどのスループットになった．
+UART（改善後）ではページサイズの影響が小さく，UARTではページサイズが大きくなるとスループットが小さくなった．
+また範囲検索では，UART（改善後）はUARTの1.5倍から1.9倍ほどのスループットになった．
+挿入のときとは反対に，UART（改善後）ではページサイズが大きくなるとスループットも大きくなり，UARTではページサイズの影響が小さかった．
 
 UART（改善後）が全ての項目でUARTを上回った理由は，空間利用効率が上昇したためだと考えられる．
 UART（改善後）はUARTに比べ空間を分割しないため，下層が比較的生成されない．
@@ -268,7 +289,7 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 
 挿入において，UART（改善後）ではページサイズの影響が小さかった．
 その理由は，ページアクセス数の減少による時間短縮と挿入に伴う木構造の変化による時間延長がトレードオフであるためだと考えられる．
-葉ノードにレコードが挿入できなくなった場合，ART層で下層生成するかUB層でノードを分割する．
+葉ノードにレコードが挿入できなくなった場合，ART層で下層を生成するかUB層でノードを分割する．
 ページサイズが小さい場合，下層生成が多く発生し木は高くなる
 その一方で，ノードの分割回数と1分割当たりにかかる時間は小さくなる．
 ページサイズが大きい場合，下層生成が発生しなくなり木は低くなる．
@@ -288,8 +309,189 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 以上から，UART（改善後）はページサイズを大きくするとページアクセス数が減少し，読み込み性能が向上すると考えられる．
 そのためこれ以降の実験では，UART（改善後）とUARTのページサイズ数を8,192バイトに設定する．
 
-\section{構築と破棄}
+\subsection{書き込み}
 
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-datasize-insert.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-datasize-delete.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-insert-2.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-insert-8.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\subsection{読み込み}
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-datasize.pdf}
+    \caption{データ数変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-dimenntion.pdf}
+    \caption{次元数変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
+\end{figure}
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-skew.pdf}
+    \caption{スキュー変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-selectivity.pdf}
+    \caption{選択率変化時の範囲検索}
+    \label{fig:japan}
+  \end{minipage}
+\end{figure}
+
+\section{有用性}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-japan-write.pdf}
+    \caption{日本データにおける書き込み性能}
+    \label{fig:japan}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-japan-read.pdf}
+    \caption{日本データにおける読み込み性能}
+    \label{fig:japan}
+  \end{minipage}
+\end{figure}
 
 
 
@@ -300,11 +502,3 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 本研究では，UARTにおける空間分割の効率化によるメモリ利用効率の向上について提案した．
 空間使用量を考慮していないという既存研究の課題について説明し，UARTにおける空間使用量を考慮した空間分割について述べた．
 今後は提案手法の実装，および既存研究との比較による有効性の検証を行う予定である．
-
-
-
-
-
-\chapter*{謝辞}
-
-本研究の一部はJSPS科研費JP20K19804，JP21H03555，JP22H03594の助成，日本電信電話株式会社との共同研究，および国立研究開発法人新エネルギー・産業技術総合開発機構（NEDO）の委託業務（JPNP16007）の結果得られたものである．
