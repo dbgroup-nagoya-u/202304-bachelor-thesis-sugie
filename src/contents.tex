@@ -281,12 +281,20 @@ UARTをチューニングするためのパラメータとして，UB木のノ�
 そこで，UARTとその他の索引構造との比較する前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
 
 2次元のシミュレーションデータを用いて，UARTの改善前後における挿入と範囲検索のスループットを測定した．
-結果を\Fig{\ref{graph:pagesize}}に示す．
+結果を\Fig{\ref{graph:ps-in}}\Fig{\ref{graph:ps-sc}}に示す．
 \begin{figure}[tb]
-  \centering
-  \includegraphics{./figures/graph-pagesize.pdf}
-  \caption{UARTの改善における挿入・範囲検索の性能比較}
-  \label{graph:pagesize}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-pagesize-insert.pdf}
+    \caption{ページサイズ変化時の挿入の比較}
+    \label{graph:ps-in}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-pagesize-scan.pdf}
+    \caption{ページサイズ変化時の範囲検索の比較}
+    \label{graph:ps-sc}
+  \end{minipage}
 \end{figure}
 また，実験に用いたUARTのパラメータを\Tab{\ref{tab:pagesize}}に示す．
 \begin{table}[tb]
@@ -343,9 +351,142 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 以上から，UART（改善後）はページサイズを大きくするとページアクセス数が減少し，読み込み性能が向上すると考えられる．
 そのためこれ以降の実験では，UART（改善後）とUARTのページサイズ数を8,192バイトに設定する．
 
-\section{構築と破棄}
+\section{書き込み}
 
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-datasize-insert.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-datasize-delete.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
 
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.5.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-insert-2.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-insert-8.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
+    \caption{データ数変化時の挿入の比較}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
+    \caption{データ数変化時の削除の比較}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
 
 
 \chapter{おわりに}
