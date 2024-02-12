@@ -367,9 +367,140 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
 その3項目それぞれにおいて，シミュレーションデータセットのレコード数，次元，スキューをそれぞれ変更して実験した．
 以下では注目したパラメータごとに結果と考察を示す．
 
-% まず，データ数を変化させて書き込みの性能を測定した．
-% データ数以外のパラメータは\Tab{\ref{tab:rec}}の値を使った．
-% 結果を\Fig{\ref{graph:rec-upd-2-0}}から\Fig{\ref{graph:rec-upd-8-0.5}}に示す．
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-datasize-insert.pdf}
+    \caption{レコード数変化時の挿入}
+    \label{graph:rec-ins}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-datasize-delete.pdf}
+    \caption{レコード数変化時の削除}
+    \label{graph:rec-del}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-record-update-2-0.pdf}
+    \caption{レコード数変化時の更新（次元：2，スキュー：0）}
+    \label{graph:rec-upd-2-0}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-record-update-2-0.5.pdf}
+    \caption{レコード数変化時の更新（次元：2，スキュー：0.5）}
+    \label{graph:rec-upd-2-0.5}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-record-update-8-0.pdf}
+    \caption{レコード数変化時の更新（次元：8，スキュー：0）}
+    \label{graph:rec-upd-8-0}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-record-update-8-0.5.pdf}
+    \caption{レコード数変化時の更新（次元：8，スキュー：0.5）}
+    \label{graph:rec-upd-8-0.5}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-dimention-insert-0.pdf}
+    \caption{次元変化時の挿入（スキュー：0）}
+    \label{graph:}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-dimention-insert-0.5.pdf}
+    \caption{次元変化時の挿入（スキュー：0.5）}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-dimention-delete-0.pdf}
+    \caption{データ数変化時の削除（スキュー：0）}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-dimention-delete-0.5.pdf}
+    \caption{データ数変化時の削除（スキュー：0.5）}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-dimention-update-0.pdf}
+    \caption{次元変化時の更新（スキュー：0）}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.45]{./figures/graph-dimention-update-0.5.pdf}
+    \caption{次元変化時の更新（スキュー：0.5）}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.36]{./figures/graph-skew-insert-2.pdf}
+    \caption{スキュー変化時の挿入（次元：2）}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.36]{./figures/graph-skew-insert-8.pdf}
+    \caption{スキュー変化時の挿入（次元：8）}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
+    \caption{スキュー変化時の削除（次元：2）}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
+    \caption{スキュー変化時の削除（次元：8）}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[tb]
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
+    \caption{スキュー変化時の更新（次元：2）}
+    \label{graph:grouped}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
+    \caption{スキュー変化時の更新（次元：8）}
+    \label{graph:paired}
+  \end{minipage}
+\end{figure}
 
 \begin{table}[tb]
   \caption{書き込みの実験における各データセットのパラメータ}
@@ -391,138 +522,32 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
     \bottomrule
   \end{tabular}
 \end{table}
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-datasize-insert.pdf}
-    \caption{レコード数変化時の挿入}
-    \label{graph:rec-ins}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-datasize-delete.pdf}
-    \caption{レコード数変化時の削除}
-    \label{graph:rec-del}
-  \end{minipage}
-\end{figure}
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.pdf}
-    \caption{レコード数変化時の更新（次元：2，スキュー：0）}
-    \label{graph:rec-upd-2-0}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.5.pdf}
-    \caption{レコード数変化時の更新（次元：2，スキュー：0.5）}
-    \label{graph:rec-upd-2-0.5}
-  \end{minipage}
-\end{figure}
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.pdf}
-    \caption{レコード数変化時の更新3}
-    \label{graph:rec-upd-8-0}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.5.pdf}
-    \caption{レコード数変化時の更新4}
-    \label{graph:rec-upd-8-0.5}
-  \end{minipage}
-\end{figure}
 
-\begin{figure}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.pdf}
-    \caption{次元変化時の挿入}
-    \label{graph:}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.5.pdf}
-    \caption{次元変化時の挿入}
-    \label{graph:paired}
-  \end{minipage}
-\end{figure}
+UART（改善）はUARTとほとんど変化がなく，UB木と同程度以上の性能となった．
+スキューはその値にかかわらず一定のスループットとなった．
+更新はパラメータによらず安定しない結果となった．
+そのため，まとめて考察を行うことにする．
 
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.pdf}
-    \caption{データ数変化時の削除}
-    \label{graph:grouped}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.5.pdf}
-    \caption{データ数変化時の削除}
-    \label{graph:paired}
-  \end{minipage}
-\end{figure}
+まず，書き込み操作は，UARTの改善による影響がほとんどなかったと考えられる．
+なぜなら，空間分割戦略は索引を担当するART層における改善であり，書き込み操作を担当するUB層をほとんど変化させていないためである．
+書き込み操作は，点検索によって対象となる葉ノードまで移動し各操作をする．
+UARTでは，キーと接頭辞が一致するパスを深さ優先探索で発見し葉ノードまで移動する．
+このとき，範囲検索なら親ノードに戻る処理が頻繁に起こり，部分空間の数は処理に大きな影響を与える．
+一方で点検索では，親ノードに戻る処理は基本起こらない．
+そのため，処理性能に木の高さは関係あっても，部分空間の数や疎密は関係しない．
 
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.pdf}
-    \caption{次元変化時の更新1}
-    \label{graph:grouped}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.5.pdf}
-    \caption{次元変化時の更新2}
-    \label{graph:paired}
-  \end{minipage}
-\end{figure}
+次にスキューの値にかかわらずスループットが安定した理由は，スキューによるデータの偏りが小さいためだと考えられる．
+ほかの全ての索引も同様の結果となったことが根拠である．
+特に，UB木と\RTree は構造と性質が大きく違うにもかかわらず，どちらともスループットがほぼ一定となっている．
+そのため，スキューによる偏りは索引構造に変化を与えないと予想でき，スループットにも影響がないと考えられる．
 
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-skew-insert-2.pdf}
-    \caption{データ数変化時の挿入3}
-    \label{graph:grouped}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-skew-insert-8.pdf}
-    \caption{データ数変化時の削除4}
-    \label{graph:paired}
-  \end{minipage}
-\end{figure}
 
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
-    \caption{データ数変化時の挿入}
-    \label{graph:grouped}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
-    \caption{データ数変化時の削除}
-    \label{graph:paired}
-  \end{minipage}
-\end{figure}
-
-\begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
-    \caption{データ数変化時の挿入}
-    \label{graph:grouped}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
-    \caption{データ数変化時の削除}
-    \label{graph:paired}
-  \end{minipage}
-\end{figure}
+最後に，更新が不安定なのはUARTにおける各操作が複雑なため，データの偏りを強く受けるためと考えられる．
+UART（改善）は4章で述べたように，索引層とデータ層にまたがる複雑な操作が多い．
+特に構造変更の処理が重いため，構造変更の回数がスループットに大きな影響を与える．
+そのため，データセットの分布が構造変更を多く要するかどうかで性能が大きく変わる．
+データセットの分布によって構造変更の回数が変わるかどうかはパラメータが複雑に関係しあう．
+よって，実際にシミュレーションデータが作られるまでその分布はわからず，性能も予測することができないと考えられる．
 
 \subsection{読み込み}
 
@@ -671,4 +696,11 @@ UART（改善）は読み書き両方において，特化した索引に近い�
 
 本研究では，UARTにおける空間分割の効率化によるメモリ利用効率の向上について提案した．
 空間使用量を考慮していないという既存研究の課題について説明し，UARTにおける空間使用量を考慮した空間分割について述べた．
-今後は提案手法の実装，および既存研究との比較による有効性の検証をする予定である．
+改善についてシミュレーションデータによる頑健性の評価と実データによる有用性の両面から評価した．
+UARTと比べシミュレーションデータの偏りに対し頑健であることが分かった．
+また，UART（改善）は実データにおいて書き込みに特化した索引であるUB木を書き込みで上回り，読み込みに特化した索引であるboostの\RTree を読み込みで同程度か少し下回る結果となった．
+つまり，実データにおいても読み書き両方において有用であることが分かった．
+このことからUART（改善）はより汎用的に使用できる多次元索引となったと考えられる．
+
+今後の課題として，複数スレッドに対応させることで性能をより向上させることや，ポリゴンデータに対応させることで地理データを扱いやすくすることが挙げられる．
+また，汎用的に使用できるので，時系列データに対応させられるかも検討の余地がある．
