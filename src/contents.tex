@@ -233,10 +233,16 @@ Zipfの法則は，ある要素の出現頻度とその大きさに双曲線の�
 boostの実装が，libspatialindexの実装に比べ高速な一方で，4次元以上に対応していないためである．
 
 \section{頑健性}
+
+UARTの頑健性を評価するために，シミュレーションデータセットを用いて書き込みと読み込みの性能を測定する．
+シミュレーションデータを用いることで様々な偏りをもったデータセットを再現する．
+それにより，パラメータに対して安定した性能が測定できるかと，どのようなパラメータが性能に影響するかを考察する．
+
 \subsection{ページサイズ}
+
 UARTをチューニングするためのパラメータとして，UB木のノードを生成する際のページサイズがある．
 ページサイズはレコードの容量として捉えられるため，挿入操作や範囲検索の結果を左右することが考えられる．
-そこで，UARTとその他の索引構造との比較する前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
+そこで，UARTとその他の索引構造との比較をする前に，UARTの改善後と改善前においてページサイズが各性能に与える影響を評価する．
 
 2次元のシミュレーションデータを用いて，UARTの改善前後における挿入と範囲検索のスループットを測定した．
 結果を\Fig{\ref{graph:ps-in}}\Fig{\ref{graph:ps-sc}}に示す．
@@ -244,50 +250,50 @@ UARTをチューニングするためのパラメータとして，UB木のノ�
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-pagesize-insert.pdf}
-    \caption{ページサイズ変化時の挿入の比較}
+    \caption{ページサイズ変化時の挿入}
     \label{graph:ps-in}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-pagesize-scan.pdf}
-    \caption{ページサイズ変化時の範囲検索の比較}
+    \caption{ページサイズ変化時の範囲検索}
     \label{graph:ps-sc}
   \end{minipage}
 \end{figure}
 また，実験に用いたUARTのパラメータを\Tab{\ref{tab:pagesize}}に示す．
 \begin{table}[tb]
-  \caption{UARTのパラメータ}
+  \caption{ページサイズの実験に用いたデータセットのパラメータ}
   \label{tab:pagesize}
   \centering \small
   \begin{tabular}{llrrrr}
     \toprule
-    比較対象       & 操作     & 次元 & レコード数 & スキュー & 選択率 \\
+    比較対象     & 操作     & 次元 & レコード数 & スキュー & 選択率 \\
     \cmidrule(lr){1-1}
     \cmidrule(lr){2-2}
     \cmidrule(lr){3-3}
     \cmidrule(lr){4-4}
     \cmidrule(lr){5-5}
     \cmidrule(lr){6-6}
-    UART           & 挿入     & 2    & 1,000,000  & 0.3      & NONE   \\
-    UART（改善後） & 挿入     & 2    & 1,000,000  & 0.3      & NONE   \\
-    UART           & 範囲検索 & 2    & 1,000,000  & 0.3      & 0.0001 \\
-    UART（改善後） & 範囲検索 & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    UART         & 挿入     & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART（改善） & 挿入     & 2    & 1,000,000  & 0.3      & NONE   \\
+    UART         & 範囲検索 & 2    & 1,000,000  & 0.3      & 0.0001 \\
+    UART（改善） & 範囲検索 & 2    & 1,000,000  & 0.3      & 0.0001 \\
     \bottomrule
   \end{tabular}
 \end{table}
-以降では，UARTの改善後をUART（改善後），UARTの改善前をUARTと表記する．
-UART（改善後）は全てのページサイズにおいてUARTよりよい結果が得られた．
-挿入では，UART（改善後）はUARTの1.3倍から1.8倍ほどのスループットになった．
-UART（改善後）ではページサイズの影響が小さく，UARTではページサイズが大きくなるとスループットが小さくなった．
-また範囲検索では，UART（改善後）はUARTの1.5倍から1.9倍ほどのスループットになった．
-挿入のときとは反対に，UART（改善後）ではページサイズが大きくなるとスループットも大きくなり，UARTではページサイズの影響が小さかった．
+以降では，UARTの改善後をUART（改善），UARTの改善前をUARTと表記する．
+UART（改善）は全てのページサイズにおいてUARTよりよい結果が得られた．
+挿入では，UART（改善）はUARTの1.3倍から1.8倍ほどのスループットになった．
+UART（改善）ではページサイズの影響が小さく，UARTではページサイズが大きくなるとスループットが小さくなった．
+また範囲検索では，UART（改善）はUARTの1.5倍から1.9倍ほどのスループットになった．
+挿入のときとは反対に，UART（改善）ではページサイズが大きくなるとスループットも大きくなり，UARTではページサイズの影響が小さかった．
 
-UART（改善後）が全ての項目でUARTを上回った理由は，空間利用効率が上昇したためだと考えられる．
-UART（改善後）はUARTに比べ空間を分割しないため，下層が比較的生成されない．
+UART（改善）が全ての項目でUARTを上回った理由は，空間利用効率が上昇したためだと考えられる．
+UART（改善）はUARTに比べ空間を分割しないため，下層が比較的生成されない．
 階層が低いと，各操作におけるページアクセス数が減少する．
 そのため，挿入や範囲検索時にキーを見つける時間が減少し，性能が向上したと考えられる．
 
-挿入において，UART（改善後）ではページサイズの影響が小さかった．
+挿入において，UART（改善）ではページサイズの影響が小さかった．
 その理由は，ページアクセス数の減少による時間短縮と挿入に伴う木構造の変化による時間延長がトレードオフであるためだと考えられる．
 葉ノードにレコードが挿入できなくなった場合，ART層で下層を生成するかUB層でノードを分割する．
 ページサイズが小さい場合，下層生成が多く発生し木は高くなる
@@ -300,73 +306,99 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
 空間分割が非効率だと，ページサイズが大きくても木が低くならない．
 そのため，ページアクセス数が増加し，更にノードの分割回数と1分割当たりにかかる時間が大きくなる．
 
-範囲検索において，UART（改善後）ではページサイズが大きいときにスループットが良くなった．
+範囲検索において，UART（改善）ではページサイズが大きいときにスループットが良くなった．
 その理由は，空間利用効率が最適化されたことによりページアクセス数が減少したためだと考えられる．
 一方でUARTではページサイズの影響が小さかった理由は，ページサイズを変えても木の高さはほとんど変わらないことが原因だと考えられる．
 空間分割戦略が非効率だと必要以上に高い木となりページアクセス数が増えてしまう．
 範囲検索では特にページアクセス数がボトルネックになるので木の高さが性能に強く影響すると考えられる．
 
-以上から，UART（改善後）はページサイズを大きくするとページアクセス数が減少し，読み込み性能が向上すると考えられる．
-そのためこれ以降の実験では，UART（改善後）とUARTのページサイズ数を8,192バイトに設定する．
+以上から，UART（改善）はページサイズを大きくするとページアクセス数が減少し，読み込み性能が向上すると考えられる．
+そのためこれ以降の実験では，UART（改善）とUARTのページサイズ数を8,192バイトに設定する．
 
 \subsection{書き込み}
 
+書き込みは挿入・削除・更新の3項目からなる．
+その3項目それぞれにおいて，シミュレーションデータセットのレコード数，次元，スキューをそれぞれ変更して実験した．
+以下では注目したパラメータごとに結果と考察を示す．
+
+まず，データ数を変化させて書き込みの性能を測定した．
+データ数以外のパラメータは\Tab{\ref{tab:rec}}の値を使った．
+結果を\Fig{\ref{graph:rec-upd-2-0}}から\Fig{\ref{graph:rec-upd-8-0.5}}に示す．
+
+\begin{table}[tb]
+  \caption{書き込みの実験における各データセットのパラメータ}
+  \label{tab:rec}
+  \centering \small
+  \begin{tabular}{llrr}
+    \toprule
+    図                              & 操作 & 次元 & スキュー \\
+    \cmidrule(lr){1-1}
+    \cmidrule(lr){2-2}
+    \cmidrule(lr){3-3}
+    \cmidrule(lr){4-4}
+    \Fig{\ref{graph:rec-ins}}       & 挿入 & 2    & 0        \\
+    \Fig{\ref{graph:rec-del}}       & 削除 & 2    & 0        \\
+    \Fig{\ref{graph:rec-upd-2-0}}   & 更新 & 2    & 0        \\
+    \Fig{\ref{graph:rec-upd-2-0.5}} & 更新 & 2    & 0.5      \\
+    \Fig{\ref{graph:rec-upd-8-0}}   & 更新 & 8    & 0        \\
+    \Fig{\ref{graph:rec-upd-8-0.5}} & 更新 & 8    & 0.5      \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-datasize-insert.pdf}
-    \caption{データ数変化時の挿入の比較}
-    \label{graph:grouped}
+    \caption{レコード数変化時の挿入}
+    \label{graph:rec-ins}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-datasize-delete.pdf}
-    \caption{データ数変化時の削除の比較}
-    \label{graph:paired}
+    \caption{レコード数変化時の削除}
+    \label{graph:rec-del}
   \end{minipage}
 \end{figure}
-
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.pdf}
-    \caption{データ数変化時の挿入の比較}
-    \label{graph:grouped}
+    \caption{レコード数変化時の更新（次元：2，スキュー：0）}
+    \label{graph:rec-upd-2-0}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.5.pdf}
-    \caption{データ数変化時の削除の比較}
-    \label{graph:paired}
+    \caption{レコード数変化時の更新（次元：2，スキュー：0.5）}
+    \label{graph:rec-upd-2-0.5}
   \end{minipage}
 \end{figure}
-
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.pdf}
-    \caption{データ数変化時の挿入の比較}
-    \label{graph:grouped}
+    \caption{レコード数変化時の更新（次元：8，スキュー：0）}
+    \label{graph:rec-upd-8-0}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.5.pdf}
-    \caption{データ数変化時の削除の比較}
-    \label{graph:paired}
+    \caption{レコード数変化時の更新（次元：8，スキュー：0.5）}
+    \label{graph:rec-upd-8-0.5}
   \end{minipage}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.pdf}
-    \caption{データ数変化時の挿入の比較}
-    \label{graph:grouped}
+    \caption{次元変化時の挿入（スキュー：0）}
+    \label{graph:}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.5.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{次元変化時の挿入（スキュー：0.5）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -375,13 +407,13 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{データ数変化時の削除（スキュー：0）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.5.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{データ数変化時の削除（スキュー：0.5）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -390,13 +422,13 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{次元変化時の更新（スキュー：0）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.5.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{次元変化時の更新（スキュー：0.5）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -405,13 +437,13 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-insert-2.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{スキュー変化時の挿入（次元：2）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-insert-8.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{スキュー変化時の挿入（次元：8）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -420,13 +452,13 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{スキュー変化時の削除（次元：2）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{スキュー変化時の削除（次元：8）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -435,30 +467,82 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{スキュー変化時の更新（次元：2）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{スキュー変化時の更新（次元：8）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
 
 \subsection{読み込み}
+
+読み込み性能を測定するために各データセットに対して範囲検索をした．
+書き込みのとき同様，シミュレーションデータセットのレコード数，次元，スキューをそれぞれ変更して実験した．
+注目したパラメータ以外は\Tab{\ref{tab:scan}}に使った値をまとめた．
+\begin{table}[tb]
+  \caption{読み込みの実験における各データセットのパラメータ}
+  \label{tab:scan}
+  \centering \small
+  \begin{tabular}{lrrrr}
+    \toprule
+    図                               & 次元 & レコード数 & スキュー & 選択率 \\
+    \cmidrule(lr){1-1}
+    \cmidrule(lr){2-2}
+    \cmidrule(lr){3-3}
+    \cmidrule(lr){4-4}
+    \cmidrule(lr){5-5}
+    \Fig{\ref{graph:dim-sc}}         & \-   & 1000000    & 0        & 0.001  \\
+    \Fig{\ref{graph:rec-sc}}         & 2    & \-         & 0        & 0.001  \\
+    \Fig{\ref{graph:skew-sc}}        & 2    & 1000000    & \-       & 0.001  \\
+    \Fig{\ref{graph:selectivity-sc}} & 2    & 1000000    & 0        & \-     \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+次元を変化させた結果を\Fig{\ref{graph:dim-sc}}に示す．
+UART（改善）は次元が2から3へ変わるときに急激に性能が低下し，それ以降は次元が大きくなるほど性能が低下した．
+次元が2のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree に比べ約0.8倍の性能になった．
+
+
+次元が大きくなるほど性能が低下するのは，次元の呪いに似た現象が起きているためだと考えられる．
+次元の呪いとは，データが高次元になるとデータ群の特徴量を計算するのに必要なデータ数が指数関数的に増加する現象である．
+データ分布が高次元になると外側に偏ることによって起こると知られている．
+この実験ではデータ数を固定しているため，次元数が増えるほどデータ数が不足し偏った分布になる．
+分布が偏りすぎるとオブジェクトが疎な空間が多くできてしまう．
+そのため，4章で述べたような性能低下が起こると考えられる．
+
+データ数を変化させた結果を\Fig{\ref{graph:rec-sc}}に示す．
+UART（改善）はデータ数が小さいと各索引は同程度の性能となり，データ数が大きいほど性能は向上した．
+データ数が100万のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree に比べ約0.8倍の性能になった．
+
+
+
+スキューを変化させた結果を\Fig{\ref{graph:skew-sc}}に示す．
+UART（改善）はスキューの値では性能がほとんど変わらなかった．
+
+
+選択率を変化させた結果を\Fig{\ref{graph:selectivity-sc}}に示す．
+UART（改善）は選択率が大きいほど性能が向上した．
+選択率が0.01のとき，UART（改善）はUARTに比べ約3倍，boostの\RTree に比べ約0.8倍の性能になった．
+
+
+
 \begin{figure}[tb]
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
-    \includegraphics[scale=0.5]{./figures/graph-scan-datasize.pdf}
-    \caption{データ数変化時の範囲検索}
-    \label{fig:japan}
-  \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-scan-dimenntion.pdf}
     \caption{次元数変化時の範囲検索}
-    \label{fig:japan}
+    \label{graph:dim-sc}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-datasize.pdf}
+    \caption{データ数変化時の範囲検索}
+    \label{graph:rec-sc}
   \end{minipage}
 \end{figure}
 \begin{figure}[tb]
@@ -466,32 +550,58 @@ UART（改善後）はUARTに比べ空間を分割しないため，下層が比
     \centering
     \includegraphics[scale=0.5]{./figures/graph-scan-skew.pdf}
     \caption{スキュー変化時の範囲検索}
-    \label{fig:japan}
+    \label{graph:skew-sc}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-scan-selectivity.pdf}
     \caption{選択率変化時の範囲検索}
-    \label{fig:japan}
+    \label{graph:selectivity-sc}
   \end{minipage}
 \end{figure}
 
 \section{有用性}
 
+UARTの有用性を評価するために，日本の地理データセットを用いて書き込みと読み込みの性能を測定する．
+実際のデータを用いることで現実的な運用を再現する．
+それにより，UARTがデータベースなどの索引として適切な性能を持つか考察する．
+
+実験結果を\Fig{\ref{graph:japan-wr}}と\Fig{\ref{graph:japan-wr}}に示す．
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-japan-write.pdf}
     \caption{日本データにおける書き込み性能}
-    \label{fig:japan}
+    \label{graph:japan-wr}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-japan-read.pdf}
     \caption{日本データにおける読み込み性能}
-    \label{fig:japan}
+    \label{graph:japan-sc}
   \end{minipage}
 \end{figure}
+更新では，UART（改善）はUART，UART，UB木で同程度の性能となった．
+挿入と削除では，UART（改善）はUB木に比べ約0.8倍，UARTに比べ約1.1倍の性能となった．
+また全ての書き込み操作において，UART（改善）はboostの\RTree を大きく上回った．
+そして範囲検索では，UART（改善）はboostの\BTree に比べ約0.8倍，UARTに比べ1.4倍の性能となり，boostの\RTree を大きく上回った．
+よって，UART（改善）は有用性が高い索引であると分かった．
+
+UART（改善）は読み書き両方において，特化した索引に近い性能を持つことが分かった．
+このような結果になったのは，索引層は空間の範囲検索に，データ層は書き込みに役割が分担されているためだと考えられる．
+役割分担したことによって，読み込み性能と書き込み性能における負の相関が弱くなると考えられる．
+読み込み性能は索引層の構造に，書き込み性能はデータ層の構造に依存する．
+そのため，索引層とデータ層が連動する場合，どちらかの層が対応する性能に最適化されてしまうともう片方の層に対応する性能は最適化されない．
+つまり，どちらかの層が変化したときにもう一方も大きく構造変更させる場合は，読み書きの性能がトレードオフとなる．
+例えば，UB木ではデータ層の構造変化に伴って索引層も構造変化する．
+データ層の並びが変わると，索引層が持つ1次元値のキーも変わるためである．
+データ層はシーケンシャルスキャンができる構造により書き込みに最適化されている．
+一方で，空間の情報を無視して多次元キーを1次元キーに変えてしてまうため，範囲検索時には断続的な検索が多くなり低性能となる．
+このように索引層とデータ層が連動するため両性能に負の相関が発生する．
+しかし，UARTは役割分担ができているため索引層とデータ層は連動しない．
+特に，不要な空間分割の回数を減らすように改善したため，データ層の構造変更が頻繁に起こっても索引層は少ない構造変化で済むようになった．
+そのため，UART（改善）は読み書き両方に最適化されたと考えられる．
+
 
 
 
