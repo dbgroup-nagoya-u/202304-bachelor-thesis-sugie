@@ -423,13 +423,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.pdf}
-    \caption{レコード数変化時の更新3}
+    \caption{レコード数変化時の更新（次元：8，スキュー：0）}
     \label{graph:rec-upd-8-0}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.5.pdf}
-    \caption{レコード数変化時の更新4}
+    \caption{レコード数変化時の更新（次元：8，スキュー：0.5）}
     \label{graph:rec-upd-8-0.5}
   \end{minipage}
 \end{figure}
@@ -438,13 +438,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.pdf}
-    \caption{次元変化時の挿入}
+    \caption{次元変化時の挿入（スキュー：0）}
     \label{graph:}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.5.pdf}
-    \caption{次元変化時の挿入}
+    \caption{次元変化時の挿入（スキュー：0.5）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -453,13 +453,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.pdf}
-    \caption{データ数変化時の削除}
+    \caption{データ数変化時の削除（スキュー：0）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.5.pdf}
-    \caption{データ数変化時の削除}
+    \caption{データ数変化時の削除（スキュー：0.5）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -468,13 +468,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.pdf}
-    \caption{次元変化時の更新1}
+    \caption{次元変化時の更新（スキュー：0）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.5.pdf}
-    \caption{次元変化時の更新2}
+    \caption{次元変化時の更新（スキュー：0.5）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -483,13 +483,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-insert-2.pdf}
-    \caption{データ数変化時の挿入3}
+    \caption{スキュー変化時の挿入（次元：2）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-insert-8.pdf}
-    \caption{データ数変化時の削除4}
+    \caption{スキュー変化時の挿入（次元：8）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -498,13 +498,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
-    \caption{データ数変化時の挿入}
+    \caption{スキュー変化時の削除（次元：2）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
-    \caption{データ数変化時の削除}
+    \caption{スキュー変化時の削除（次元：8）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -513,13 +513,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
-    \caption{データ数変化時の挿入}
+    \caption{スキュー変化時の更新（次元：2）}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
-    \caption{データ数変化時の削除}
+    \caption{スキュー変化時の更新（次元：8）}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -554,10 +554,17 @@ UART（改善）は次元が2から3へ変わるときに急激に性能が低�
 次元が2のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree に比べ約0.8倍の性能になった．
 
 
+次元が大きくなるほど性能が低下するのは，次元の呪いに似た現象が起きているためだと考えられる．
+次元の呪いとは，データが高次元になるとデータ群の特徴量を計算するのに必要なデータ数が指数関数的に増加する現象である．
+データ分布が高次元になると外側に偏ることによって起こると知られている．
+この実験ではデータ数を固定しているため，次元数が増えるほどデータ数が不足し偏った分布になる．
+分布が偏りすぎるとオブジェクトが疎な空間が多くできてしまう．
+そのため，4章で述べたような性能低下が起こると考えられる．
 
 データ数を変化させた結果を\Fig{\ref{graph:rec-sc}}に示す．
 UART（改善）はデータ数が小さいと各索引は同程度の性能となり，データ数が大きいほど性能は向上した．
 データ数が100万のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree に比べ約0.8倍の性能になった．
+
 
 
 スキューを変化させた結果を\Fig{\ref{graph:skew-sc}}に示す．
@@ -573,15 +580,15 @@ UART（改善）は選択率が大きいほど性能が向上した．
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
     \centering
-    \includegraphics[scale=0.5]{./figures/graph-scan-datasize.pdf}
-    \caption{データ数変化時の範囲検索}
-    \label{graph:rec-sc}
-  \end{minipage}
-  \begin{minipage}[c]{0.495\textwidth}
-    \centering
     \includegraphics[scale=0.5]{./figures/graph-scan-dimenntion.pdf}
     \caption{次元数変化時の範囲検索}
     \label{graph:dim-sc}
+  \end{minipage}
+  \begin{minipage}[c]{0.495\textwidth}
+    \centering
+    \includegraphics[scale=0.5]{./figures/graph-scan-datasize.pdf}
+    \caption{データ数変化時の範囲検索}
+    \label{graph:rec-sc}
   \end{minipage}
 \end{figure}
 \begin{figure}[tb]
