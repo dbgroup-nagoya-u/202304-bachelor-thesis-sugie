@@ -9,7 +9,7 @@
 
 % 多次元索引の種類
 多次元索引は多次元空間を直接扱うものと1次元空間へ射影して扱うものの大きく2つに分けられ，本稿では後者を主に扱う．
-多次元空間を直接扱う索引の代表例はR木~\cite{sigmod:Beckmann1990}であり，多次元の包囲矩形などを用いて多次元空間を階層的に分割していく．
+多次元空間を直接扱う索引の代表例はR木~\cite{sigmod:Beckmann1990}であり，多次元の最小包含矩形などを用いて多次元空間上の点を階層的にグループ化していく．
 1次元空間へ射影するものは主に空間充填曲線に基づいており，Universal B木（UB木）~\cite{wwca:Bayer1997}が代表である．
 後者の利点は，既存の効率的な1次元索引を流用でき，挿入・削除に伴う木の構造変更などが容易な点である．
 一方で欠点として，多次元データを1次元化するため，隣接するデータが多次元空間上では近接していない可能性がある点が挙げられる．
@@ -296,13 +296,13 @@ UARTをチューニングするためのパラメータとして，UB木のノ�
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-pagesize-insert.pdf}
-    \caption{ページサイズ変化時の挿入の比較}
+    \caption{ページサイズ変化時の挿入}
     \label{graph:ps-in}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-pagesize-scan.pdf}
-    \caption{ページサイズ変化時の範囲検索の比較}
+    \caption{ページサイズ変化時の範囲検索}
     \label{graph:ps-sc}
   \end{minipage}
 \end{figure}
@@ -369,7 +369,7 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
 
 まず，データ数を変化させて書き込みの性能を測定した．
 データ数以外のパラメータは\Tab{\ref{tab:rec}}の値を使った．
-結果を\Fig{\ref{graph:rec-ins-2-0}}から\Fig{\ref{graph:rec-upd-8-0.5}}に示す．
+結果を\Fig{\ref{graph:rec-upd-2-0}}から\Fig{\ref{graph:rec-upd-8-0.5}}に示す．
 
 \begin{table}[tb]
   \caption{書き込みの実験における各データセットのパラメータ}
@@ -395,13 +395,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-datasize-insert.pdf}
-    \caption{レコード数変化時の挿入の比較}
+    \caption{レコード数変化時の挿入}
     \label{graph:rec-ins}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-datasize-delete.pdf}
-    \caption{レコード数変化時の削除の比較}
+    \caption{レコード数変化時の削除}
     \label{graph:rec-del}
   \end{minipage}
 \end{figure}
@@ -409,13 +409,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.pdf}
-    \caption{レコード数変化時の更新の比較1}
+    \caption{レコード数変化時の更新（次元：2，スキュー：0）}
     \label{graph:rec-upd-2-0}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-2-0.5.pdf}
-    \caption{レコード数変化時の更新の比較2}
+    \caption{レコード数変化時の更新（次元：2，スキュー：0.5）}
     \label{graph:rec-upd-2-0.5}
   \end{minipage}
 \end{figure}
@@ -423,13 +423,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.pdf}
-    \caption{レコード数変化時の更新の比較3}
+    \caption{レコード数変化時の更新3}
     \label{graph:rec-upd-8-0}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-record-update-8-0.5.pdf}
-    \caption{レコード数変化時の更新の比較4}
+    \caption{レコード数変化時の更新4}
     \label{graph:rec-upd-8-0.5}
   \end{minipage}
 \end{figure}
@@ -438,13 +438,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.pdf}
-    \caption{次元変化時の挿入の比較}
+    \caption{次元変化時の挿入}
     \label{graph:}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-insert-0.5.pdf}
-    \caption{次元変化時の挿入の比較}
+    \caption{次元変化時の挿入}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -453,13 +453,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{データ数変化時の削除}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-delete-0.5.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{データ数変化時の削除}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -468,13 +468,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.pdf}
-    \caption{次元変化時の更新の比較}
+    \caption{次元変化時の更新1}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-dimention-update-0.5.pdf}
-    \caption{次元変化時の更新の比較}
+    \caption{次元変化時の更新2}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -483,13 +483,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-insert-2.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{データ数変化時の挿入3}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-insert-8.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{データ数変化時の削除4}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -498,13 +498,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-delete-2.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{データ数変化時の挿入}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-delete-8.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{データ数変化時の削除}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -513,13 +513,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-update-2.pdf}
-    \caption{データ数変化時の挿入の比較}
+    \caption{データ数変化時の挿入}
     \label{graph:grouped}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-skew-update-8.pdf}
-    \caption{データ数変化時の削除の比較}
+    \caption{データ数変化時の削除}
     \label{graph:paired}
   \end{minipage}
 \end{figure}
@@ -528,10 +528,10 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
 
 読み込み性能を測定するために各データセットに対して範囲検索をした．
 書き込みのとき同様，シミュレーションデータセットのレコード数，次元，スキューをそれぞれ変更して実験した．
-注目したパラメータ以外は\Tab{\ref{tab:rec}}に使った値をまとめた．
+注目したパラメータ以外は\Tab{\ref{tab:scan}}に使った値をまとめた．
 \begin{table}[tb]
-  \caption{書き込みの実験における各データセットのパラメータ}
-  \label{tab:rec}
+  \caption{読み込みの実験における各データセットのパラメータ}
+  \label{tab:scan}
   \centering \small
   \begin{tabular}{lrrrr}
     \toprule
@@ -551,12 +551,13 @@ UART（改善）はUARTに比べ空間を分割しないため，下層が比較
 
 次元を変化させた結果を\Fig{\ref{graph:dim-sc}}に示す．
 UART（改善）は次元が2から3へ変わるときに急激に性能が低下し，それ以降は次元が大きくなるほど性能が低下した．
-次元が2のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree と約0.8倍の性能になった．
+次元が2のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree に比べ約0.8倍の性能になった．
+
 
 
 データ数を変化させた結果を\Fig{\ref{graph:rec-sc}}に示す．
 UART（改善）はデータ数が小さいと各索引は同程度の性能となり，データ数が大きいほど性能は向上した．
-データ数が100万のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree と約0.8倍の性能になった．
+データ数が100万のとき，UART（改善）はUARTに比べ約2.5倍，boostの\RTree に比べ約0.8倍の性能になった．
 
 
 スキューを変化させた結果を\Fig{\ref{graph:skew-sc}}に示す．
@@ -565,7 +566,7 @@ UART（改善）はスキューの値では性能がほとんど変わらなか�
 
 選択率を変化させた結果を\Fig{\ref{graph:selectivity-sc}}に示す．
 UART（改善）は選択率が大きいほど性能が向上した．
-選択率が0.01のとき，UART（改善）はUARTに比べ約3倍，boostの\RTree と約0.8倍の性能になった．
+選択率が0.01のとき，UART（改善）はUARTに比べ約3倍，boostの\RTree に比べ約0.8倍の性能になった．
 
 
 
@@ -600,20 +601,45 @@ UART（改善）は選択率が大きいほど性能が向上した．
 
 \section{有用性}
 
+UARTの有用性を評価するために，日本の地理データセットを用いて書き込みと読み込みの性能を測定する．
+実際のデータを用いることで現実的な運用を再現する．
+それにより，UARTがデータベースなどの索引として適切な性能を持つか考察する．
+
+実験結果を\Fig{\ref{graph:japan-wr}}と\Fig{\ref{graph:japan-wr}}に示す．
 \begin{figure}[tb]
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-japan-write.pdf}
     \caption{日本データにおける書き込み性能}
-    \label{fig:japan}
+    \label{graph:japan-wr}
   \end{minipage}
   \begin{minipage}[c]{0.495\textwidth}
     \centering
     \includegraphics[scale=0.5]{./figures/graph-japan-read.pdf}
     \caption{日本データにおける読み込み性能}
-    \label{fig:japan}
+    \label{graph:japan-sc}
   \end{minipage}
 \end{figure}
+更新では，UART（改善）はUART，UART，UB木で同程度の性能となった．
+挿入と削除では，UART（改善）はUB木に比べ約0.8倍，UARTに比べ約1.1倍の性能となった．
+また全ての書き込み操作において，UART（改善）はboostの\RTree を大きく上回った．
+そして範囲検索では，UART（改善）はboostの\BTree に比べ約0.8倍，UARTに比べ1.4倍の性能となり，boostの\RTree を大きく上回った．
+よって，UART（改善）は有用性が高い索引であることが分かった．
+
+UART（改善）は読み書き両方において，その操作に特化した索引に近い性能を持つことが分かった．
+このような結果になったのは，索引層は空間の範囲検索に，データ層は書き込みに役割が分担されているためだと考えられる．
+役割分担したことによって，読み込み性能と書き込み性能における負の相関が弱くなると考えられる．
+読み込み性能は索引層の構造に，書き込み性能はデータ層の構造に依存する．
+そのため，索引層とデータ層が連動する場合，どちらかの層が対応する性能に最適化されてしまうともう片方の層に対応する性能は最適化されない．
+つまり，どちらかの層が変化したときにもう一方も大きく構造変更させる場合は，読み書きの性能がトレードオフとなる．
+例えば，UB木ではデータ層も索引層も構造変化させやすい．
+索引層はキーの値しか保持しないため，構造変化の処理が単純なためである．
+一方で，空間の情報を無視して多次元キーを１次元キーに変えてしてまうため，範囲検索時には断続的な検索が多くなり低性能となる．
+このように索引層とデータ層が連動するため両性能に負の相関が発生する．
+しかし，UARTは役割分担ができているため索引層とデータ層は連動しない．
+特に，不要な空間分割の回数を減らすように改善したため，データ層の構造変更が頻繁に起こっても索引層は少ない構造変化で済むようになった．
+そのため，UART（改善）は読み書き両方に最適化されたと考えられる．
+
 
 
 
